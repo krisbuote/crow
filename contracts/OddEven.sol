@@ -11,7 +11,7 @@ contract OddEven {
    uint8 count = 0; 
 
    function play(uint number) payable public {
-        require(msg.value == 1 ether);
+        require(msg.value == 1 ether, "Incorrect value. Send 1 ether.");
         players[count] = Player(msg.sender, number);
         count++;
         if (count == 2) selectWinner();

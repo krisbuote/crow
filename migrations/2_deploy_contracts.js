@@ -1,5 +1,8 @@
 var TruthStake = artifacts.require("./TruthStake.sol");
+var OddEven = artifacts.require("./OddEven.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(TruthStake);
+	// Place constructor arguments: deployer.deploy(contractName, arg1, arg2,...);
+  deployer.deploy(TruthStake, "The current year is 2018.", 10);
+  deployer.deploy(OddEven);
 };
