@@ -1,3 +1,9 @@
+package-lock.json
+node_modules/
+test/election.js
+contracts/Election.sol
+build/contracts/Election.json
+
 # Logs
 logs
 *.log
