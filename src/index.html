@@ -21,32 +21,44 @@
     <div class="container" style="width: 650px;">
       <div class="row">
         <div class="col-lg-12">
-          <h1 class="text-center">Election Results</h1>
+          <h1 class="text-center">Truth Staking</h1>
           <hr/>
           <br/>
           <div id="loader">
             <p class="text-center">Loading...</p>
           </div>
           <div id="content" style="display: none;">
-            <table class="table">
+            <p id="stakedStatement" class="text-center"></p>
+            <hr/>
+            <br/>
+
+            <p id="pot" class="text-center"></p>
+            <h3 class="text-center">ETH staked so far</h3>
+
+
+
+<!--             <table class="table">
               <thead>
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Votes</th>
+                  <th scope="col">Choice</th>
+                  <th scope="col">Ether Staked</th>
                 </tr>
               </thead>
-              <tbody id="candidatesResults">
+              <tbody id="stakeResults">
               </tbody>
-            </table>
+            </table> -->
+
+
             <hr/>
-            <form onSubmit="App.castVote(); return false;">
+            <form onSubmit="App.makeStake(); return false;">
               <div class="form-group">
-                <label for="candidatesSelect">Select Candidate</label>
-                <select class="form-control" id="candidatesSelect">
-                </select>
+                <label for="positionSelect">Select Position</label>
+                <select class="form-control" id="positionSelect"></select>
               </div>
-              <button type="submit" class="btn btn-primary">Vote</button>
+              <label for="stakeValue">Stake Amount: </label>
+              <input type="number" id="stakeValue" placeholder="1.000 ether"/>
+              <button type="submit" class="btn btn-primary">Stake</button>
               <hr />
             </form>
             <p id="accountAddress" class="text-center"></p>

@@ -12,7 +12,6 @@ contract TruthStake {
 	uint public FPot;
 	uint public totalPot;
 	uint public stakeIndex;
-	uint public balance;
 	address public marketMaker;
 	string public statement;
 	uint public stakeEndTime;
@@ -41,6 +40,8 @@ contract TruthStake {
     event CurrentPot(uint contractBalance);
     event MajorityStaked(uint position);
     event CorrectStaker(uint stakerIndex, address stakerAddr, uint stakerStake, uint stakerPosition);
+   	event StatementStaked(string statement);
+
 
 	// Constructor for the first stake on a new statement
 	constructor (string _statement, uint _stakingTime) public {
@@ -53,21 +54,20 @@ contract TruthStake {
 
 		// do something with _statement
 		statement = _statement;
-		emit StatementCheck(statement);
+		emit StatementStaked(statement);
 
 		// keep address of contract creator
 		marketMaker = msg.sender;
 
 		// TODO: Consider Initial Stake with constructor?
+		// stake(_position);
 
 	}
 
 	function stake(uint _position) public payable { 
 
-	    // Revert the call if the staking period is over.
-        require(now <= stakeEndTime, "Stake already ended.");
-
-		// Minimum stake threshold
+	    // Revert the call if the staking period is over or if insufficient value transacted
+        // require(now <= stakeEndTime, "Stake already ended.");
 		require(msg.value > 0, "Insufficient stake value."); 
 
 		// Add Staker
@@ -102,8 +102,8 @@ contract TruthStake {
 
 	function endStake() public {
 		// 1. Conditions
-		// Temporary function to simulate stake ending
-		require(now >= stakeEndTime, "There is still staking time remaining.");
+		// Require that sufficient time has passed and endStake has not already been called
+		// require(now >= stakeEndTime, "There is still staking time remaining.");
 		require(!stakeEnded, "endStake has already been called.");
 
 		// 2. Effects
@@ -126,6 +126,9 @@ contract TruthStake {
 		// distribute pot between winners, proportional to their stake
 		distribute(winningPosition);
 
+		// require(address(this).balance == 0, "There is ether remaining in the contract!");
+
+
 	}
 
 
@@ -136,7 +139,6 @@ contract TruthStake {
 	event RewardCheck(uint rewardTransfered);
 	event ProfitCheck(uint profitCalculated);
 	event PotsCheck(uint TPotValue, uint FPotValue);
-	event StatementCheck(string statementStaked);
 
 	function distribute(uint _winningPosition) private {
 		// for (address addr = marketMaker; addr ) // Loop through addresses somehow instead?
@@ -166,7 +168,6 @@ contract TruthStake {
 				
 				// If the majority staked on true
 				if (_winningPosition == 1) {
-
 					profit = stakers[i].stake * FPot / TPot; 
 				}
 
@@ -176,7 +177,6 @@ contract TruthStake {
 				}
 
 				emit ProfitCheck(profit);
-				emit PotsCheck(TPot, FPot);
 
 				// Their reward is original stake + profit
 				reward = stakers[i].stake + profit;
@@ -195,13 +195,11 @@ contract TruthStake {
 		totalPot = 0;
 		emit IndexCheck(stakeIndex);
 		emit CurrentPot(address(this).balance);		
-		emit StatementCheck(statement);
+		emit StatementStaked(statement);
 
-		require(address(this).balance == 0, "Ether remaining in the contract!");
 
 
 	}
 
-	// Need Time Lock
 
 }
