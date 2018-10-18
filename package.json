@@ -13,9 +13,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "lite-server": "^2.3.0"
+    "chai": "^4.2.0",
+    "lite-server": "^2.3.0",
+    "mocha": "^5.2.0"
   },
   "dependencies": {
-    "mocha": "^5.2.0"
+    "truffle": "^4.1.14"
   }
 }
