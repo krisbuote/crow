@@ -8,14 +8,6 @@ pragma solidity ^0.4.2;
 contract TruthStake {
 	// Create a pot that tracks Ether staked on True (T) vs. False (F)
 	// Must keep sub-pots private, but totalPot value should be public
-	uint private TPot; // can be viewed but not modified externally?
-	uint private FPot;
-	uint public totalPot;
-	uint public stakeIndex;
-	address public marketMaker;
-	string public statement;
-	uint public stakeEndTime;
-	bool public stakeEnded;
 
 	// Keep track of:
 	// Addresses, how much was staked by each address,  and on which position (T or F)
@@ -27,12 +19,18 @@ contract TruthStake {
 		uint position; // Staker's position (1 true or 0 false)
 	}
 
-	// struct Stake {} 	// Create struct Stake instead of storing in Staker?
-    // Stake[] public stakes; 	// A dynamically-sized array of `Stake` structs.
-
-    // A mapping from their stakeIndex to Staker struct
+	// A mapping from their stakeIndex to Staker struct
 	mapping(uint => Staker) private stakers; // TODO: What happens if staker stakes more than once? Use stakeIndex?
 
+	// State Variables
+	uint private TPot; // can be viewed but not modified externally?
+	uint private FPot;
+	uint public totalPot;
+	uint public stakeIndex;
+	address public marketMaker;
+	string public statement;
+	uint public stakeEndTime;
+	bool public stakeEnded;
 
     // Events that will be emitted on changes.
     event NewStake(uint amount);
@@ -41,6 +39,14 @@ contract TruthStake {
     event MajorityStaked(uint position);
     event CorrectStaker(uint stakerIndex, address stakerAddr, uint stakerStake, uint stakerPosition);
    	event StatementStaked(string statement);
+
+   	// Events for debugging
+	event LoopCheck(uint loopNumber);
+	event StakerCheck(uint stakersIndex);
+	event IndexCheck(uint currentStakeIndex);
+	event RewardCheck(uint rewardTransfered);
+	event ProfitCheck(uint profitCalculated);
+	event PotsCheck(uint TPotValue, uint FPotValue);
 
 
 	// Constructor for the first stake on a new statement
@@ -131,14 +137,6 @@ contract TruthStake {
 
 	}
 
-
-	// Events for debugging
-	event LoopCheck(uint loopNumber);
-	event StakerCheck(uint stakersIndex);
-	event IndexCheck(uint currentStakeIndex);
-	event RewardCheck(uint rewardTransfered);
-	event ProfitCheck(uint profitCalculated);
-	event PotsCheck(uint TPotValue, uint FPotValue);
 
 	function distribute(uint _winningPosition) private {
 		// for (address addr = marketMaker; addr ) // Loop through addresses somehow instead?
