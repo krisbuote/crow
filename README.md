@@ -13,7 +13,7 @@ A decentralized application that allows the crowd to stake money on the truthful
 
 ## Documentation
 
-Install Ganache, truffle, node, metamask
+0. Install Ganache, truffle, node, metamask
 
 1. To get working full-stack template: $truffle unbox pet-shop 
 2. To compile smart contracts and build the .json: $truffle compile
@@ -28,7 +28,7 @@ Install Ganache, truffle, node, metamask
 10. View blockchain stuff with $web3.eth.X . $web3.eth.accounts returns account addresses in Ganache
 11. Use contractname.js in /tests/ to test the contract in action using Mocha and Chai it(...) tests
 
-General troubleshooting
+### General troubleshooting
 + if making a transaction with metamask and tx nonce is mismatched from ganache network's tx nonce, reset your account in metamask:
 https://consensys.zendesk.com/hc/en-us/articles/360004177531-Resetting-an-Account-New-UI-
 
