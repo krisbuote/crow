@@ -2,7 +2,7 @@ App = {
   web3Provider: null,
   contracts: {},
   account: '0x0',
-  hasVoted: false,
+  stakeEnded: false,
 
   init: function() {
     return App.initWeb3();
@@ -68,30 +68,31 @@ App = {
       }
     });
 
-    loader.hide();
-    content.show();
+    // Position select menu
+    var positionSelect = $("#positionSelect");
+    positionSelect.empty();
+    var chooseTrue = "<option value='1'> True </ option>"
+    var chooseFalse = "<option value='0'> False </ option>"
+    positionSelect.append(chooseTrue);
+    positionSelect.append(chooseFalse);
 
     // Load contract data
     App.contracts.TruthStake.deployed().then(function(instance) {
      TruthStakeInstance = instance;
       return TruthStakeInstance.statement();
+
     }).then(function(statement) {
-      // var stakedStatement = $("#stakedStatement");
-      // stakedStatement.empty();
-      // stakedStatement.append(stakedStatement)
-      $("#stakedStatement").html("Statement: " + statement);
-
-      // Position select menu
-      var positionSelect = $("#positionSelect");
-      positionSelect.empty();
-      var chooseTrue = "<option value='1'> True </ option>"
-      var chooseFalse = "<option value='0'> False </ option>"
-      positionSelect.append(chooseTrue);
-      positionSelect.append(chooseFalse);
-
+      // Display the statement that was staked upon.
+      $("#stakedStatement").html('"' + statement + '"');
+      return TruthStakeInstance.stakeEndTime();
+    }).then(function(endTime) {
+      // Display the remaining time to stake.
+      timeRemaining = endTime.toNumber() - Math.floor(Date.now()/1000);
+      $("#timeRemaining").html(timeRemaining + " seconds remaining.");
       return TruthStakeInstance.totalPot();
     }).then(function(pot) {
-      $("pot").html(pot);
+      // Display the total amount staked.
+      $("#pot").html(pot.toNumber()/10**18);
       loader.hide();
       content.show();
     }).catch(function(error) {
@@ -101,41 +102,24 @@ App = {
 
   },
 
-
-
-
   makeStake: function() {
     var position = $("#positionSelect").val();
     var stakeValue = $("#stakeValue").val();
     App.contracts.TruthStake.deployed().then(function(instance) {
       TruthStakeInstance = instance;
       return TruthStakeInstance.stake(position, { from: App.account, value:stakeValue*10**18 });
+
     }).then(function(result) {
       // Wait for stake total to update
       content.hide();
       loader.show();
+
     }).catch(function(err) {
       console.error(err);
     });
   }
 
 };
-
-
-
-//   castVote: function() {
-//     var candidateId = $('#candidatesSelect').val();
-//     App.contracts.TruthStake.deployed().then(function(instance) {
-//       return instance.vote(candidateId, { from: App.account });
-//     }).then(function(result) {
-//       // Wait for votes to update
-//       $("#content").hide();
-//       $("#loader").show();
-//     }).catch(function(err) {
-//       console.error(err);
-//     });
-//   }
-// };
 
 $(function() {
   $(window).load(function() {

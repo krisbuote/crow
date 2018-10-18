@@ -4,7 +4,7 @@ var Election = artifacts.require("./Election.sol");
 
 module.exports = function(deployer) {
 	// Place constructor arguments: deployer.deploy(contractName, arg1, arg2,...);
-  deployer.deploy(TruthStake, "The current year is 2018.", 10);
+  deployer.deploy(TruthStake, "Donald Trump is the current President of the United States.", 60*60);
   deployer.deploy(OddEven);
   deployer.deploy(Election);
 };

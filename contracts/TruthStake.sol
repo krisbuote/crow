@@ -67,7 +67,7 @@ contract TruthStake {
 	function stake(uint _position) public payable { 
 
 	    // Revert the call if the staking period is over or if insufficient value transacted
-        // require(now <= stakeEndTime, "Stake already ended.");
+        require(now <= stakeEndTime, "Stake already ended.");
 		require(msg.value > 0, "Insufficient stake value."); 
 
 		// Add Staker
@@ -103,7 +103,7 @@ contract TruthStake {
 	function endStake() public {
 		// 1. Conditions
 		// Require that sufficient time has passed and endStake has not already been called
-		// require(now >= stakeEndTime, "There is still staking time remaining.");
+		require(now >= stakeEndTime, "There is still staking time remaining.");
 		require(!stakeEnded, "endStake has already been called.");
 
 		// 2. Effects
