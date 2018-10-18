@@ -11,7 +11,7 @@ A decentralized application that allows the crowd to stake money on the truthful
 + [metamask](https://metamask.io/)
 
 
-## --- Documentation ---
+## Documentation
 
 Install Ganache, truffle, node, metamask
 

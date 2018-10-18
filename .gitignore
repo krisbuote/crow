@@ -3,6 +3,7 @@ test/election.js
 test/oddeven.js
 contracts/Election.sol
 contracts/OddEven.sol
+migrations/2_deploy_contracts_dev.js
 build/
 
 # Logs
