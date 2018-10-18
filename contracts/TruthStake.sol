@@ -8,8 +8,8 @@ pragma solidity ^0.4.2;
 contract TruthStake {
 	// Create a pot that tracks Ether staked on True (T) vs. False (F)
 	// Must keep sub-pots private, but totalPot value should be public
-	uint public TPot; // can be viewed but not modified externally?
-	uint public FPot;
+	uint private TPot; // can be viewed but not modified externally?
+	uint private FPot;
 	uint public totalPot;
 	uint public stakeIndex;
 	address public marketMaker;
