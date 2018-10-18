@@ -41,6 +41,8 @@ App = {
       // Restart Chrome if you are unable to receive this event
       // This is a known issue with Metamask
       // https://github.com/MetaMask/metamask-extension/issues/2393
+
+      // TODO: This will refresh the page when *anybody* stakes. Could be annoying
       instance.NewStake({}, {
         fromBlock: 0,
         toBlock: 'latest'
