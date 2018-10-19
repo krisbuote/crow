@@ -13,7 +13,7 @@ contract TruthStake {
 	// Addresses, how much was staked by each address,  and on which position (T or F)
 	struct Staker {
 		// consider probabilistic staking
-		uint index; // index of stake
+		uint index; // index of stake --- REDUNDANT
 		address addr; // Staker's address
 		uint stake; // Value staked
 		uint position; // Staker's position (1 true or 0 false)
@@ -37,10 +37,10 @@ contract TruthStake {
     event StakeEnded(uint finalPot);
     event CurrentPot(uint contractBalance);
     event MajorityStaked(uint position);
-    event CorrectStaker(uint stakerIndex, address stakerAddr, uint stakerStake, uint stakerPosition);
    	event StatementStaked(string statement);
 
    	// Events for debugging
+   	event CorrectStaker(uint stakerIndex, address stakerAddr, uint stakerStake, uint stakerPosition);
 	event LoopCheck(uint loopNumber);
 	event StakerCheck(uint stakersIndex);
 	event IndexCheck(uint currentStakeIndex);
@@ -73,7 +73,7 @@ contract TruthStake {
 	function stake(uint _position) public payable { 
 
 	    // Revert the call if the staking period is over or if insufficient value transacted
-        require(now <= stakeEndTime, "Stake already ended.");
+        // require(now <= stakeEndTime, "Stake already ended.");
 		require(msg.value > 0, "Insufficient stake value."); 
 
 		// Add Staker
@@ -109,7 +109,7 @@ contract TruthStake {
 	function endStake() public {
 		// 1. Conditions
 		// Require that sufficient time has passed and endStake has not already been called
-		require(now >= stakeEndTime, "There is still staking time remaining.");
+		// require(now >= stakeEndTime, "There is still staking time remaining.");
 		require(!stakeEnded, "endStake has already been called.");
 
 		// 2. Effects
