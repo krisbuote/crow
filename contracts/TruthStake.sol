@@ -110,7 +110,7 @@ contract TruthStake {
 		// 1. Conditions
 		// Require that sufficient time has passed and endStake has not already been called
 		// require(now >= stakeEndTime, "There is still staking time remaining.");
-		require(!stakeEnded, "endStake has already been called.");
+		// require(!stakeEnded, "endStake has already been called.");
 
 		// 2. Effects
 		stakeEnded = true;

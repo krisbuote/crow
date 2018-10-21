@@ -119,6 +119,20 @@ App = {
     }).catch(function(err) {
       console.error(err);
     });
+  },
+
+   endStakeNow: function() {
+    App.contracts.TruthStake.deployed().then(function(instance) {
+      TruthStakeInstance = instance;
+      return TruthStakeInstance.endStake()
+    }).then(function(result) {
+      // Wait for stake total to update
+      content.hide();
+      loader.show();
+
+    }).catch(function(err) {
+      console.error(err);
+    });
   }
 
 };

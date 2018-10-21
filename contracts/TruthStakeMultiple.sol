@@ -195,7 +195,6 @@ contract TruthStakeMultiple {
 
 		}
 
-		// TODO: Should struct entries be deleted here to save memory?
 	}
 
 
