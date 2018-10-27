@@ -145,7 +145,7 @@ App = {
       statementInfo.empty();
 
       // table builder 
-      for (var i = 0; i <= absNumStatements; i++) {
+      for (var i = 0; i < absNumStatements; i++) {
 
         /////////////  BUG IN HERE /////////////////// 
         /// Adding 2 to ID for each statement created and putting a blank row. ////
@@ -158,7 +158,8 @@ App = {
           var stakeEndTime = statement[2];
           var marketMaker = statement[3];
           var numStakes = statement[4];
-          var stakeEnded = statement[5];
+          var amountStaked = statement[5];
+          var stakeEnded = statement[6];
           var stakedEth;
 
           // for (var j = 0; j <= numStakes; j++) {
@@ -166,7 +167,7 @@ App = {
           //   stakedEth += stake[1]
           // }
 
-          var statementTemplate = "<tr><td>" + statementID + "</td><td>" + numStakes + "</td><td>" + "FILL IN" + "</td><td>" + text + "</td><td>" + stakeEndTime + "</td></tr>"
+          var statementTemplate = "<tr><td>" + statementID + "</td><td>" + numStakes + "</td><td>" + amountStaked + "</td><td>" + text + "</td></tr>"
           statementInfo.append(statementTemplate);
         });
 
