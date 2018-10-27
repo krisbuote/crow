@@ -51,9 +51,9 @@ App = {
   initContract: function() {
     $.getJSON("TruthStakeMultiple.json", function(TruthStakeMultiple) {
       // Instantiate a new truffle contract from the artifact
-      App.contracts.TruthStake = TruffleContract(TruthStakeMultiple);
+      App.contracts.TruthStakeMultiple = TruffleContract(TruthStakeMultiple);
       // Connect provider to interact with contract
-      App.contracts.TruthStake.setProvider(App.web3Provider);
+      App.contracts.TruthStakeMultiple.setProvider(App.web3Provider);
 
       App.listenForEvents();
 
@@ -63,7 +63,7 @@ App = {
 
   // Listen for events emitted from the contract
   listenForEvents: function() {
-    App.contracts.TruthStake.deployed().then(function(instance) {
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
       // Restart Chrome if you are unable to receive this event
       // This is a known issue with Metamask
       // https://github.com/MetaMask/metamask-extension/issues/2393
@@ -82,7 +82,7 @@ App = {
 
   // // Listen for events emitted from the contract
   // listenForEvents: function() {
-  //   App.contracts.TruthStake.deployed().then(function(instance) {
+  //   App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
   //     // Restart Chrome if you are unable to receive this event
   //     // This is a known issue with Metamask
   //     // https://github.com/MetaMask/metamask-extension/issues/2393
@@ -107,7 +107,7 @@ App = {
   // },
 
   render: function() {
-    var TruthStakeInstance;
+    var TruthStakeMultipleInstance;
     var loader = $("#loader");
     var content = $("#content");
 
@@ -133,43 +133,49 @@ App = {
 
     // content.show()
 
-    
-
-    //////////////////////////// KRIS THIS SECTION NOT RUNNING 
-
-
     // Load contract data
-    App.contracts.TruthStake.deployed().then(function(instance) {
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
 
-      TruthStakeInstance = instance;
-      return TruthStakeInstance.absNumStatements();
+      TruthStakeMultipleInstance = instance;
+      return TruthStakeMultipleInstance.absNumStatements();
 
-      // BUG ABOVE HERE. TEST WITH content.show()
     }).then(function(absNumStatements) {
 
-      var statementInfo = $("statementInfo");
+      var statementInfo = $("#statementInfo");
       statementInfo.empty();
 
-      ////////// BBUGG HERE: TruthStakeInstance.statements is NOT a function until first statement made. ////
-      ///////////// Maybe? Or maybe not. ///////////// Bug in this loop tho
-      
       // table builder 
       for (var i = 0; i <= absNumStatements; i++) {
-        TruthStakeInstance.statements(i).then(function(statement) {
-          var statementID = statement.ID;
-          var text = statement.statement;
-          var stakeEndTime = statement.stakeEndTime;
-          // var pot;
-          var numStakes = statement.numStakes;
-          // var stakeEnded = statement.stakeEnded;
 
-          var statementTemplate = "<tr><th>" + statementID + "</th><td>" + numStakes + "</td><td>" + text + "</td><td>" + stakeEndTime + "</td></tr>"
+        /////////////  BUG IN HERE /////////////////// 
+        /// Adding 2 to ID for each statement created and putting a blank row. ////
+
+        ///// Erasing table after stake made./////
+
+        TruthStakeMultipleInstance.statements(i).then(function(statement) {
+          var statementID = statement[0];
+          var text = statement[1];
+          var stakeEndTime = statement[2];
+          var marketMaker = statement[3];
+          var numStakes = statement[4];
+          var stakeEnded = statement[5];
+          var stakedEth;
+
+          for (var j = 0; j <= numStakes; j++) {
+            var stake = statement.stakes(j)
+            stakedEth += stake[1]
+          }
+
+          var statementTemplate = "<tr><td>" + statementID + "</td><td>" + numStakes + "</td><td>" + stakedEth + "</td><td>" + text + "</td><td>" + stakeEndTime + "</td></tr>"
           statementInfo.append(statementTemplate);
         });
 
+        /////////////// BUG END //////////////////
+
       }
 
-      return TruthStakeInstance.absEthStaked();
+
+      return TruthStakeMultipleInstance.absEthStaked();
     }).then(function(absEthStaked) {
       // Display the total amount staked.
       $("#absEthStaked").html(absEthStaked.toNumber()/10**18);
@@ -184,9 +190,9 @@ App = {
   makeNewStatement: function() {
     var newStatementString = $("#newStatementString").val();
     var newStatementStakingPeriod = $("#newStatementStakingPeriod").val();
-    App.contracts.TruthStake.deployed().then(function(instance) {
-      TruthStakeInstance = instance;
-      return TruthStakeInstance.newStatement(newStatementString, newStatementStakingPeriod);
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
+      TruthStakeMultipleInstance = instance;
+      return TruthStakeMultipleInstance.newStatement(newStatementString, newStatementStakingPeriod);
 
     }).then(function(result) {
       newStatementID = result;
@@ -203,9 +209,9 @@ App = {
     var statementIdToStake = $("#statementIdToStake").val()
     var position = $("#positionSelect").val();
     var stakeValue = $("#stakeValue").val();
-    App.contracts.TruthStake.deployed().then(function(instance) {
-      TruthStakeInstance = instance;
-      return TruthStakeInstance.stake(statementIdToStake, position, { from: App.account, value:stakeValue*10**18 });
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
+      TruthStakeMultipleInstance = instance;
+      return TruthStakeMultipleInstance.stake(statementIdToStake, position, { from: App.account, value:stakeValue*10**18 });
 
     }).then(function(result) {
       // Wait for stake total to update
@@ -218,9 +224,9 @@ App = {
   },
 
    endStakeNow: function() {
-    App.contracts.TruthStake.deployed().then(function(instance) {
-      TruthStakeInstance = instance;
-      return TruthStakeInstance.endStake()
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
+      TruthStakeMultipleInstance = instance;
+      return TruthStakeMultipleInstance.endStake()
     }).then(function(result) {
       // Wait for stake total to update
       content.hide();

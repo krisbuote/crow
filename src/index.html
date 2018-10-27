@@ -33,13 +33,14 @@
             <br/>
             <hr/>
             <br/>
-            <h2 id="absEthStaked" class="text-center"></h2>
+            <!-- <h2 id="absEthStaked" class="text-center"></h2> -->
             <br/>
             <table class="table">
               <thead>
                 <tr>
                   <th scope="col">ID</th>
                   <th scope="col"># Stakes</th>
+                  <th scope="col">Amount Staked</th>
                   <th scope="col">Statement</th>
                   <th scope="col">End Time</th>
                 </tr>
@@ -50,7 +51,7 @@
             <br/>
             <hr/>
             <div class="stake-selection">
-              <h2 class="text-center">Stake on a statement </h2>
+              <h2 class="text-center">Stake on a statement</h2>
               <hr/>
               <form onSubmit="App.makeStake(); return false;">
                 <label for="statementIdToStake">Statement ID: </label>
@@ -69,7 +70,7 @@
             </div>
 
             <div class="new-statement">
-              <h2 class="text-center">Stake on a statement </h2>
+              <h2 class="text-center">Create new statement</h2>
               <hr/>
               <form onSubmit="App.makeNewStatement();">
                 <label for="newStatementString">Enter new statement: </label>

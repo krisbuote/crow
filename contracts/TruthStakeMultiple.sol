@@ -16,7 +16,7 @@ contract TruthStakeMultiple {
 		address marketMaker;
 		uint numStakes;
 		bool stakeEnded;
-		mapping(uint => Stake) stakes;
+		mapping(uint => Stake) stakes; // TODO: Make private?
 	}
 
 	// Keep track of:
@@ -34,7 +34,7 @@ contract TruthStakeMultiple {
 		uint F;
 	}
 
-	mapping(uint => Statement) statements; 
+	mapping(uint => Statement) public statements; 
 	mapping(uint => Pot) private pots;  /////////// TODO: Put pot mapping in statement too?
 
 	// State Variables
@@ -72,9 +72,6 @@ contract TruthStakeMultiple {
 		statementID = absNumStatements++; //sets statementID and THEN increases absNumStatements by 1
 		statements[statementID] = Statement(statementID, _statement, stakeEndTime, msg.sender, 0, false);
 		pots[statementID] = Pot(0, 0, 0);
-
-		// Add to global statement count 
-		absNumStatements++;
 
 		emit NewStatement(_statement, stakeEndTime);
 	}
