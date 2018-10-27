@@ -22,32 +22,6 @@ App = {
     return App.initContract();
   },
 
-// // NEW METAMASK ENABLER
-//   window.addEventListener('load', async () => {
-//     // Modern dapp browsers...
-//     if (window.ethereum) {
-//         window.web3 = new Web3(ethereum);
-//         try {
-//             // Request account access if needed
-//             await ethereum.enable();
-//             // Acccounts now exposed
-//             web3.eth.sendTransaction({/* ... */});
-//         } catch (error) {
-//             // User denied account access...
-//         }
-//     }
-//     // Legacy dapp browsers...
-//     else if (window.web3) {
-//         window.web3 = new Web3(web3.currentProvider);
-//         // Acccounts always exposed
-//         web3.eth.sendTransaction({/* ... */});
-//     }
-//     // Non-dapp browsers...
-//     else {
-//         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
-//     }
-// });
-
   initContract: function() {
     $.getJSON("TruthStakeMultiple.json", function(TruthStakeMultiple) {
       // Instantiate a new truffle contract from the artifact
@@ -131,30 +105,18 @@ App = {
     positionSelect.append(chooseTrue);
     positionSelect.append(chooseFalse);
 
-    // content.show()
-
-    
-
-    //////////////////////////// KRIS THIS SECTION NOT RUNNING 
-
-
     // Load contract data
     App.contracts.TruthStake.deployed().then(function(instance) {
-
-      TruthStakeInstance = instance;
+     TruthStakeInstance = instance;
       return TruthStakeInstance.absNumStatements();
 
-      // BUG ABOVE HERE. TEST WITH content.show()
     }).then(function(absNumStatements) {
 
       var statementInfo = $("statementInfo");
       statementInfo.empty();
 
-      ////////// BBUGG HERE: TruthStakeInstance.statements is NOT a function until first statement made. ////
-      ///////////// Maybe? Or maybe not. ///////////// Bug in this loop tho
-      
       // table builder 
-      for (var i = 0; i <= absNumStatements; i++) {
+      for (var i=0; i < absNumStatements; i++) {
         TruthStakeInstance.statements(i).then(function(statement) {
           var statementID = statement.ID;
           var text = statement.statement;
@@ -168,7 +130,6 @@ App = {
         });
 
       }
-
       return TruthStakeInstance.absEthStaked();
     }).then(function(absEthStaked) {
       // Display the total amount staked.
@@ -181,23 +142,23 @@ App = {
 
   },
 
-  makeNewStatement: function() {
-    var newStatementString = $("#newStatementString").val();
-    var newStatementStakingPeriod = $("#newStatementStakingPeriod").val();
-    App.contracts.TruthStake.deployed().then(function(instance) {
-      TruthStakeInstance = instance;
-      return TruthStakeInstance.newStatement(newStatementString, newStatementStakingPeriod);
+  // makeNewStatement: function() {
+  //   var newStatementString = $("#newStatementString").val();
+  //   var newStatementStakingPeriod = $("#newStatementStakingPeriod").val();
+  //   App.contracts.TruthStake.deployed().then(function(instance) {
+  //     TruthStakeInstance = instance;
+  //     return TruthStakeInstance.newStatement(newStatementString, newStatementStakingPeriod);
 
-    }).then(function(result) {
-      newStatementID = result;
-      content.hide();
-      loader.show();
+  //   }).then(function(result) {
+  //     newStatementID = result;
+  //     content.hide();
+  //     loader.show();
 
-    }).catch(function(err) {
-      console.error(err);
-    });
+  //   }).catch(function(err) {
+  //     console.error(err);
+  //   });
 
-  },
+  // },
 
   makeStake: function() {
     var statementIdToStake = $("#statementIdToStake").val()

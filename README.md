@@ -26,7 +26,11 @@ A decentralized application that allows the crowd to stake money on the truthful
 8. Once in console, enter $contractName.deployed().then(function(i) { app = i; }) // this should return 'undefined'
 9. Call contract functions with app.functionName(x,y,z, { from : 0x123..., value : 10 }) // {} contains metadata for the function
 10. View blockchain stuff with $web3.eth.X . $web3.eth.accounts returns account addresses in Ganache
-11. Use contractname.js in /tests/ to test the contract in action using Mocha and Chai it(...) tests
+
+## Testing
+1. Use contractname.js in /tests/ to test the contract in action using Mocha and Chai it(...) tests
+2. Run $truffle test 
+2.1 To run a single test file: $truffle test ./path/to/test/file.js
 
 ### General troubleshooting
 + if making a transaction with metamask and tx nonce is mismatched from ganache network's tx nonce, reset your account in metamask:

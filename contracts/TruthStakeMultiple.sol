@@ -10,6 +10,7 @@ contract TruthStakeMultiple {
 	// Must keep sub-pots private, but totalPot value should be public
 
 	struct Statement {
+		uint id;
 		string statement;
 		uint stakeEndTime;
 		address marketMaker;
@@ -37,8 +38,9 @@ contract TruthStakeMultiple {
 	mapping(uint => Pot) private pots;  /////////// TODO: Put pot mapping in statement too?
 
 	// State Variables
-	uint public numStatements;
-	uint public totalNumStakes;
+	uint public absNumStatements;
+	uint public absNumStakes;
+	uint public absEthStaked;
 
     // Events that will be emitted on changes.
     event NewStake(uint statementID, uint amount);
@@ -57,9 +59,9 @@ contract TruthStakeMultiple {
 
 
 	// Constructor executes once when contract is created
-	constructor () public {
-
-	}
+	// constructor () public {
+	// 	newStatement("This statement is false", 1325000000);
+	// }
 
 	function newStatement(string _statement, uint _stakingTime) public returns(uint statementID) {
 		require(bytes(_statement).length > 0, "requires bytes(statement) > 0. Possibly empty string given.");
@@ -67,9 +69,12 @@ contract TruthStakeMultiple {
 		uint stakeEndTime;
 
 		stakeEndTime = now + _stakingTime;
-		statementID = numStatements++; //sets statementID and THEN increases numStatements by 1
-		statements[statementID] = Statement(_statement, stakeEndTime, msg.sender, 0, false);
+		statementID = absNumStatements++; //sets statementID and THEN increases absNumStatements by 1
+		statements[statementID] = Statement(statementID, _statement, stakeEndTime, msg.sender, 0, false);
 		pots[statementID] = Pot(0, 0, 0);
+
+		// Add to global statement count 
+		absNumStatements++;
 
 		emit NewStatement(_statement, stakeEndTime);
 	}
@@ -80,17 +85,22 @@ contract TruthStakeMultiple {
 		require(msg.value > 0, "Insufficient stake value.");
 		//// TODO: require(address exists)?
 		require(_position == 0 || _position == 1, "Invalid position to stake on."); 
-		require(_statementID < numStatements && _statementID >= 0, "Invalid Statement ID.");
+		require(_statementID < absNumStatements && _statementID >= 0, "Invalid Statement ID.");
 
 		Statement storage s = statements[_statementID];
 		require(now <= s.stakeEndTime, "Stake already ended for this statement.");
 
-		// Add Stake
+		// Map Stake with statement
 		s.stakes[s.numStakes++] = Stake({addr:msg.sender, amount:msg.value, position:_position});
 
 		// Add the stake to total pot
 		addToPot(msg.value, _position, _statementID);
 		emit NewStake(_statementID, msg.value);
+
+		// Add to global trackers
+		absNumStakes++;
+		absEthStaked += msg.value;
+
 	}
 
 	function addToPot(uint _amount, uint _position, uint _statementID) private {
