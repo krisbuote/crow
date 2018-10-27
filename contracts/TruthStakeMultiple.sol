@@ -25,13 +25,14 @@ contract TruthStakeMultiple {
 		// consider probabilistic staking
 		address addr; // Staker's address
 		uint amount; // Value staked
-		uint position; // Staker's position (1 true or 0 false)
+		uint position; // Staker's position (1 true or 0 false) //////////TODO: remove position from here
 	}
 
 	struct Pot {
 		uint total;
 		uint T;
 		uint F;
+		//////////// TODO: Store stakes in here with position/amount . Private!
 	}
 
 	mapping(uint => Statement) public statements; 
