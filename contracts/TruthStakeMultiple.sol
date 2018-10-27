@@ -87,7 +87,7 @@ contract TruthStakeMultiple {
 		Statement storage s = statements[_statementID];
 		require(now <= s.stakeEndTime, "Stake already ended for this statement.");
 
-		// Map Stake with statement
+		// Map Stake with statement AND THEN add one to numStakes
 		s.stakes[s.numStakes++] = Stake({addr:msg.sender, amount:msg.value, position:_position});
 
 		// Add the stake to total pot

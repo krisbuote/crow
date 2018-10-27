@@ -161,12 +161,12 @@ App = {
           var stakeEnded = statement[5];
           var stakedEth;
 
-          for (var j = 0; j <= numStakes; j++) {
-            var stake = statement.stakes(j)
-            stakedEth += stake[1]
-          }
+          // for (var j = 0; j <= numStakes; j++) {
+          //   var stake = statement.stakes(j)
+          //   stakedEth += stake[1]
+          // }
 
-          var statementTemplate = "<tr><td>" + statementID + "</td><td>" + numStakes + "</td><td>" + stakedEth + "</td><td>" + text + "</td><td>" + stakeEndTime + "</td></tr>"
+          var statementTemplate = "<tr><td>" + statementID + "</td><td>" + numStakes + "</td><td>" + "FILL IN" + "</td><td>" + text + "</td><td>" + stakeEndTime + "</td></tr>"
           statementInfo.append(statementTemplate);
         });
 
