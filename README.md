@@ -33,4 +33,4 @@ A decentralized application that allows the crowd to stake money on the truthful
 https://consensys.zendesk.com/hc/en-us/articles/360004177531-Resetting-an-Account-New-UI-
 
 ### Sample Prototype
-![prototype web interface](https://github.com/krisbuote/crow/blob/master/src/images/prototype_interface.JPG "Staking.")
+![prototype web interface](https://github.com/krisbuote/crow/blob/master/src/images/prototype_interface.PNG "Staking.")
