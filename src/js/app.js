@@ -22,12 +22,44 @@ App = {
     return App.initContract();
   },
 
+
+
+  // initWeb3: function() {
+  //   // NEW METAMASK ENABLER
+  //   window.addEventListener('load', async () => {
+  //     // Modern dapp browsers...
+  //     if (window.ethereum) {
+  //         window.web3 = new Web3(ethereum);
+  //         try {
+  //             // Request account access if needed
+  //             await ethereum.enable();
+  //             // Acccounts now exposed
+  //             web3.eth.sendTransaction({/* ... */});
+  //         } catch (error) {
+  //             // User denied account access...
+  //         }
+  //     }
+  //     // Legacy dapp browsers...
+  //     else if (window.web3) {
+  //         window.web3 = new Web3(web3.currentProvider);
+  //         // Acccounts always exposed
+  //         web3.eth.sendTransaction({/* ... */});
+  //     }
+  //     // Non-dapp browsers...
+  //     else {
+  //         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+  //     }
+  //   });
+  // },
+
+
+
   initContract: function() {
-    $.getJSON("TruthStake.json", function(TruthStake) {
+    $.getJSON("TruthStakeMultiple.json", function(TruthStakeMultiple) {
       // Instantiate a new truffle contract from the artifact
-      App.contracts.TruthStake = TruffleContract(TruthStake);
+      App.contracts.TruthStakeMultiple = TruffleContract(TruthStakeMultiple);
       // Connect provider to interact with contract
-      App.contracts.TruthStake.setProvider(App.web3Provider);
+      App.contracts.TruthStakeMultiple.setProvider(App.web3Provider);
 
       App.listenForEvents();
 
@@ -37,7 +69,7 @@ App = {
 
   // Listen for events emitted from the contract
   listenForEvents: function() {
-    App.contracts.TruthStake.deployed().then(function(instance) {
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
       // Restart Chrome if you are unable to receive this event
       // This is a known issue with Metamask
       // https://github.com/MetaMask/metamask-extension/issues/2393
@@ -54,8 +86,34 @@ App = {
     });
   },
 
+  // // Listen for events emitted from the contract
+  // listenForEvents: function() {
+  //   App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
+  //     // Restart Chrome if you are unable to receive this event
+  //     // This is a known issue with Metamask
+  //     // https://github.com/MetaMask/metamask-extension/issues/2393
+
+  //     // TODO: This will refresh the page when *anybody* stakes. Could be annoying
+  //     instance.NewStake({}, {
+  //       fromBlock: 0,
+  //       toBlock: 'latest'
+  //     }).watch(function(error, event) {
+  //       console.log("event triggered", event)
+  //       // Reload when a new vote is recorded
+  //       App.render();
+  //       return instance;
+  //     }).then(function(instance) {
+  //       instance.NewStatement({}, {
+  //         fromBlock: 0,
+  //         toBlock: 'latest'
+  //       }).watch(function(error, event) {
+  //         console.log("NewStatement event triggered.", event)
+  //         App.render();
+  //       });      
+  // },
+
   render: function() {
-    var TruthStakeInstance;
+    var TruthStakeMultipleInstance;
     var loader = $("#loader");
     var content = $("#content");
 
@@ -70,6 +128,7 @@ App = {
       }
     });
 
+
     // Position select menu
     var positionSelect = $("#positionSelect");
     positionSelect.empty();
@@ -78,38 +137,86 @@ App = {
     positionSelect.append(chooseTrue);
     positionSelect.append(chooseFalse);
 
-    // Load contract data
-    App.contracts.TruthStake.deployed().then(function(instance) {
-     TruthStakeInstance = instance;
-      return TruthStakeInstance.statement();
+    // content.show()
 
-    }).then(function(statement) {
-      // Display the statement that was staked upon.
-      $("#stakedStatement").html('"' + statement + '"');
-      return TruthStakeInstance.stakeEndTime();
-    }).then(function(endTime) {
-      // Display the remaining time to stake.
-      timeRemaining = endTime.toNumber() - Math.floor(Date.now()/1000);
-      $("#timeRemaining").html(timeRemaining + " seconds remaining.");
-      return TruthStakeInstance.totalPot();
-    }).then(function(pot) {
+    // Load contract data
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
+
+      TruthStakeMultipleInstance = instance;
+      return TruthStakeMultipleInstance.absNumStatements();
+
+    }).then(function(absNumStatements) {
+
+      var statementInfo = $("#statementInfo");
+      statementInfo.empty();
+
+      // table builder 
+      for (var i = 0; i < absNumStatements; i++) {
+
+        /////////////  BUG IN HERE /////////////////// 
+        ///// Erasing table after stake made./////
+
+        TruthStakeMultipleInstance.statements(i).then(function(statement) {
+          var statementID = statement[0];
+          var text = statement[1];
+          var stakeEndTime = statement[2];
+          var marketMaker = statement[3];
+          var numStakes = statement[4];
+          var amountStaked = statement[5];
+          var stakeEnded = statement[6];
+          var stakedEth;
+
+          // for (var j = 0; j <= numStakes; j++) {
+          //   var stake = statement.stakes(j)
+          //   stakedEth += stake[1]
+          // }
+
+          var statementTemplate = "<tr><td>" + statementID + "</td><td>" + numStakes + "</td><td>" + text + "</td></tr>"
+          statementInfo.append(statementTemplate);
+        });
+
+        /////////////// BUG END //////////////////
+
+      }
+
+
+      return TruthStakeMultipleInstance.absEthStaked();
+    }).then(function(absEthStaked) {
       // Display the total amount staked.
-      $("#pot").html(pot.toNumber()/10**18);
+      $("#absEthStaked").html(absEthStaked.toNumber()/10**18);
       loader.hide();
       content.show();
     }).catch(function(error) {
       console.warn(error);
     });
 
+  },
+
+  makeNewStatement: function() {
+    var newStatementString = $("#newStatementString").val();
+    var newStatementStakingPeriod = $("#newStatementStakingPeriod").val();
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
+      TruthStakeMultipleInstance = instance;
+      return TruthStakeMultipleInstance.newStatement(newStatementString, newStatementStakingPeriod);
+
+    }).then(function(result) {
+      newStatementID = result;
+      content.hide();
+      loader.show();
+
+    }).catch(function(err) {
+      console.error(err);
+    });
 
   },
 
   makeStake: function() {
+    var statementIdToStake = $("#statementIdToStake").val()
     var position = $("#positionSelect").val();
     var stakeValue = $("#stakeValue").val();
-    App.contracts.TruthStake.deployed().then(function(instance) {
-      TruthStakeInstance = instance;
-      return TruthStakeInstance.stake(position, { from: App.account, value:stakeValue*10**18 });
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
+      TruthStakeMultipleInstance = instance;
+      return TruthStakeMultipleInstance.stake(statementIdToStake, position, { from: App.account, value:stakeValue*10**18 });
 
     }).then(function(result) {
       // Wait for stake total to update
@@ -122,9 +229,9 @@ App = {
   },
 
    endStakeNow: function() {
-    App.contracts.TruthStake.deployed().then(function(instance) {
-      TruthStakeInstance = instance;
-      return TruthStakeInstance.endStake()
+    App.contracts.TruthStakeMultiple.deployed().then(function(instance) {
+      TruthStakeMultipleInstance = instance;
+      return TruthStakeMultipleInstance.endStake()
     }).then(function(result) {
       // Wait for stake total to update
       content.hide();
@@ -142,3 +249,30 @@ $(function() {
     App.init();
   });
 });
+
+
+// // NEW METAMASK ENABLER
+//   window.addEventListener('load', async () => {
+//     // Modern dapp browsers...
+//     if (window.ethereum) {
+//         window.web3 = new Web3(ethereum);
+//         try {
+//             // Request account access if needed
+//             await ethereum.enable();
+//             // Acccounts now exposed
+//             web3.eth.sendTransaction({/* ... */});
+//         } catch (error) {
+//             // User denied account access...
+//         }
+//     }
+//     // Legacy dapp browsers...
+//     else if (window.web3) {
+//         window.web3 = new Web3(web3.currentProvider);
+//         // Acccounts always exposed
+//         web3.eth.sendTransaction({/* ... */});
+//     }
+//     // Non-dapp browsers...
+//     else {
+//         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+//     }
+// });

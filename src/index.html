@@ -28,25 +28,58 @@
             <p class="text-center">Loading...</p>
           </div>
           <div id="content" style="display: none;">
-            <h1 id="pot" class="text-center"></h1>
-            <h3 class="text-center">ETH staked so far</h3>
+            <h1 id="absEthStaked" class="text-center"></h1>
+            <h3 class="text-center">ETH staked overall</h3>
             <br/>
             <hr/>
             <br/>
-            <h2 id="stakedStatement" class="text-center"></h2>
+            <!-- <h2 id="absEthStaked" class="text-center"></h2> -->
+            <br/>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col"># Stakes</th>
+                  <th scope="col">Statement</th>
+                </tr>
+              </thead>
+              <tbody id="statementInfo">
+              </tbody>
+            </table>
             <br/>
             <hr/>
-            <form onSubmit="App.makeStake(); return false;">
-              <div class="form-group">
-                <label for="positionSelect">Select Position</label>
-                <select class="form-control" id="positionSelect"></select>
-              </div>
-              <label for="stakeValue">Stake Amount: </label>
-              <input type="number" id="stakeValue" placeholder="1.000 ether" step="0.000000000000000001"/>
-              <button type="submit" class="btn btn-primary">Stake</button>
-              <hr />
-            </form>
-            <p id="timeRemaining" class="text-center"></p>
+            <div class="stake-selection">
+              <h2 class="text-center">Stake on a statement</h2>
+              <hr/>
+              <form onSubmit="App.makeStake(); return false;">
+                <label for="statementIdToStake">Statement ID: </label>
+                <input type="number" id="statementIdToStake" placeholder="1" step="1"/>
+                <br/>
+                <br/>
+                <div class="form-group">
+                  <label for="positionSelect">Select Position</label>
+                  <select class="form-control" id="positionSelect"></select>
+                </div>
+                <label for="stakeValue">Stake Amount: </label>
+                <input type="number" id="stakeValue" placeholder="1.000 ether" step="0.000000000000000001"/>
+                <button type="submit" class="btn btn-primary">Stake</button>
+                <hr />
+              </form>
+            </div>
+
+            <div class="new-statement">
+              <h2 class="text-center">Create new statement</h2>
+              <hr/>
+              <form onSubmit="App.makeNewStatement();">
+                <label for="newStatementString">Enter new statement: </label>
+                <input type="text" id="newStatementString" placeholder="This sentence is false."/>
+                <br/>
+                <label for="newStatementStakingPeriod">Set staking period (seconds): </label>
+                <input type="number" id="newStatementStakingPeriod" placeholder="3600"/>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+            <!-- <p id="timeRemaining" class="text-center"></p> -->
+            <br/>
             <p id="accountAddress" class="text-center"></p>
             
             <form onSubmit="App.endStakeNow();">
