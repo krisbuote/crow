@@ -5,6 +5,7 @@ contracts/Election.sol
 contracts/OddEven.sol
 migrations/2_deploy_contracts_dev.js
 build/
+src/js_samples
 
 # Logs
 logs

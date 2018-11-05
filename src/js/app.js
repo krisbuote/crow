@@ -22,31 +22,37 @@ App = {
     return App.initContract();
   },
 
-// // NEW METAMASK ENABLER
-//   window.addEventListener('load', async () => {
-//     // Modern dapp browsers...
-//     if (window.ethereum) {
-//         window.web3 = new Web3(ethereum);
-//         try {
-//             // Request account access if needed
-//             await ethereum.enable();
-//             // Acccounts now exposed
-//             web3.eth.sendTransaction({/* ... */});
-//         } catch (error) {
-//             // User denied account access...
-//         }
-//     }
-//     // Legacy dapp browsers...
-//     else if (window.web3) {
-//         window.web3 = new Web3(web3.currentProvider);
-//         // Acccounts always exposed
-//         web3.eth.sendTransaction({/* ... */});
-//     }
-//     // Non-dapp browsers...
-//     else {
-//         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
-//     }
-// });
+
+
+  // initWeb3: function() {
+  //   // NEW METAMASK ENABLER
+  //   window.addEventListener('load', async () => {
+  //     // Modern dapp browsers...
+  //     if (window.ethereum) {
+  //         window.web3 = new Web3(ethereum);
+  //         try {
+  //             // Request account access if needed
+  //             await ethereum.enable();
+  //             // Acccounts now exposed
+  //             web3.eth.sendTransaction({/* ... */});
+  //         } catch (error) {
+  //             // User denied account access...
+  //         }
+  //     }
+  //     // Legacy dapp browsers...
+  //     else if (window.web3) {
+  //         window.web3 = new Web3(web3.currentProvider);
+  //         // Acccounts always exposed
+  //         web3.eth.sendTransaction({/* ... */});
+  //     }
+  //     // Non-dapp browsers...
+  //     else {
+  //         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+  //     }
+  //   });
+  // },
+
+
 
   initContract: function() {
     $.getJSON("TruthStakeMultiple.json", function(TruthStakeMultiple) {
@@ -148,8 +154,6 @@ App = {
       for (var i = 0; i < absNumStatements; i++) {
 
         /////////////  BUG IN HERE /////////////////// 
-        /// Adding 2 to ID for each statement created and putting a blank row. ////
-
         ///// Erasing table after stake made./////
 
         TruthStakeMultipleInstance.statements(i).then(function(statement) {
@@ -167,7 +171,7 @@ App = {
           //   stakedEth += stake[1]
           // }
 
-          var statementTemplate = "<tr><td>" + statementID + "</td><td>" + numStakes + "</td><td>" + amountStaked + "</td><td>" + text + "</td></tr>"
+          var statementTemplate = "<tr><td>" + statementID + "</td><td>" + numStakes + "</td><td>" + text + "</td></tr>"
           statementInfo.append(statementTemplate);
         });
 
@@ -245,3 +249,30 @@ $(function() {
     App.init();
   });
 });
+
+
+// // NEW METAMASK ENABLER
+//   window.addEventListener('load', async () => {
+//     // Modern dapp browsers...
+//     if (window.ethereum) {
+//         window.web3 = new Web3(ethereum);
+//         try {
+//             // Request account access if needed
+//             await ethereum.enable();
+//             // Acccounts now exposed
+//             web3.eth.sendTransaction({/* ... */});
+//         } catch (error) {
+//             // User denied account access...
+//         }
+//     }
+//     // Legacy dapp browsers...
+//     else if (window.web3) {
+//         window.web3 = new Web3(web3.currentProvider);
+//         // Acccounts always exposed
+//         web3.eth.sendTransaction({/* ... */});
+//     }
+//     // Non-dapp browsers...
+//     else {
+//         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+//     }
+// });

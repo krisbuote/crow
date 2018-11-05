@@ -15,7 +15,6 @@ contract TruthStakeMultiple {
 		uint stakeEndTime;
 		address marketMaker;
 		uint numStakes;
-		uint amountStaked;
 		bool stakeEnded;
 		mapping(uint => Stake) stakes; // TODO: Make private?
 	}
@@ -72,7 +71,7 @@ contract TruthStakeMultiple {
 
 		stakeEndTime = now + _stakingTime;
 		statementID = absNumStatements++; //sets statementID and THEN increases absNumStatements by 1
-		statements[statementID] = Statement(statementID, _statement, stakeEndTime, msg.sender, 0, msg.value, false);
+		statements[statementID] = Statement(statementID, _statement, stakeEndTime, msg.sender, 0, false);
 		pots[statementID] = Pot(0, 0, 0);
 
 		emit NewStatement(_statement, stakeEndTime);
@@ -98,7 +97,6 @@ contract TruthStakeMultiple {
 
 		// Add to global trackers
 		absNumStakes++;
-		absEthStaked += msg.value;
 
 	}
 
@@ -135,6 +133,9 @@ contract TruthStakeMultiple {
 
 		// find majority position. TODO: Handle ties.
 		Pot memory p = pots[_statementID];
+
+		// Add pot to total Eth tracker
+		absEthStaked += p.total;
 
 		// If the majority staked on true
 		if ( p.T >= p.F ) {
