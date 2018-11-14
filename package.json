@@ -1,7 +1,7 @@
 {
   "name": "crow",
   "version": "1.0.0",
-  "description": "",
+  "description": "A decentralized application that allows the crowd to stake money on the truthfulness of claims made by the media.",
   "main": "truffle.js",
   "directories": {
     "test": "test"
@@ -10,7 +10,7 @@
     "dev": "lite-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Kristopher Buote",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.2.0",
@@ -18,6 +18,16 @@
     "mocha": "^5.2.0"
   },
   "dependencies": {
-    "truffle": "^4.1.14"
-  }
+    "ethereumjs-tx": "^1.3.7",
+    "truffle": "^4.1.14",
+    "web3": "^1.0.0-beta.36"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krisbuote/crow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/krisbuote/crow/issues"
+  },
+  "homepage": "https://github.com/krisbuote/crow#readme"
 }

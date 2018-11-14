@@ -121,12 +121,12 @@ App = {
     content.hide();
 
     // Load account data
-    web3.eth.getCoinbase(function(err, account) {
-      if (err === null) {
-        App.account = account;
-        $("#accountAddress").html("Your Account: " + account);
-      }
-    });
+    // web3.eth.getCoinbase(function(err, account) {
+    //   if (err === null) {
+    //     App.account = account;
+    //     $("#accountAddress").html("Your Account: " + account);
+    //   }
+    // });
 
 
     // Position select menu
