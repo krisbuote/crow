@@ -2,6 +2,8 @@
 
 A decentralized application that allows the crowd to stake money on the truthfulness of claims made by the media.
 
+Live smart contract: [https://etherscan.io/address/0x3c02dac293ec087ef59ee4de0f50354b0b062dd3](https://etherscan.io/address/0x3c02dac293ec087ef59ee4de0f50354b0b062dd3)
+
 --- WORK IN PROGRESS ---
 
 ## Requirements
